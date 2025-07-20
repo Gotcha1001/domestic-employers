@@ -1,101 +1,319 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { SignedIn, SignedOut, useUser } from "@clerk/nextjs";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { Users, Home, Languages, Star, Shield, Clock } from "lucide-react";
+
+export default function HomePage() {
+  const { user } = useUser();
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+        delayChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.8,
+        ease: "easeOut" as const,
+      },
+    },
+  };
+
+  const floatingAnimation = {
+    y: [-10, 10, -10],
+    transition: {
+      duration: 3,
+      repeat: Infinity,
+      ease: "easeInOut" as const,
+    },
+  };
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
+    <div className="min-h-screen bg-gradient-to-br from-purple-950 via-purple-900 to-purple-800 text-white overflow-hidden">
+      <div className="absolute inset-0 overflow-hidden">
+        <motion.div
+          className="absolute -top-40 -right-40 w-80 h-80 bg-purple-600 rounded-full opacity-20 blur-3xl"
+          animate={floatingAnimation}
         />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+        <motion.div
+          className="absolute -bottom-40 -left-40 w-96 h-96 bg-purple-500 rounded-full opacity-15 blur-3xl"
+          animate={{
+            ...floatingAnimation,
+            transition: { ...floatingAnimation.transition, delay: 1.5 },
+          }}
+        />
+      </div>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="relative z-10"
+      >
+        <motion.section
+          variants={itemVariants}
+          className="container mx-auto px-6 py-20 text-center"
+        >
+          <motion.h1
+            className="text-6xl md:text-7xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-purple-300 via-purple-400 to-pink-300"
+            whileHover={{ scale: 1.05 }}
+            transition={{ type: "spring", stiffness: 300 }}
           >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            WorkConnect
+          </motion.h1>
+          <motion.p
+            className="text-xl md:text-2xl mb-12 max-w-4xl mx-auto leading-relaxed"
+            variants={itemVariants}
           >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+            The ultimate platform connecting{" "}
+            <span className="font-bold text-purple-300">domestic workers</span>{" "}
+            and <span className="font-bold text-purple-300">employers</span>{" "}
+            with trust, transparency, and ease
+          </motion.p>
+
+          <motion.div
+            variants={itemVariants}
+            className="flex justify-center gap-6 mb-16"
+          >
+            <SignedIn>
+              <Link href={`/view-profile/${user?.id}`}>
+                <Button className="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white text-lg py-4 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                  View Profile
+                </Button>
+              </Link>
+              <Link href="/profile">
+                <Button className="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white text-lg py-4 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                  Edit Profile
+                </Button>
+              </Link>
+              <Link href="/employers">
+                <Button className="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white text-lg py-4 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                  Browse Employers
+                </Button>
+              </Link>
+              <Link href="/workers">
+                <Button className="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white text-lg py-4 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                  Browse Workers
+                </Button>
+              </Link>
+            </SignedIn>
+            <SignedOut>
+              <Link href="/sign-up">
+                <Button className="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white text-lg py-4 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                  Get Started Free
+                </Button>
+              </Link>
+            </SignedOut>
+          </motion.div>
+        </motion.section>
+
+        {/* Features Section */}
+        <motion.section
+          variants={itemVariants}
+          className="container mx-auto px-6 py-16"
         >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+          <motion.h2
+            className="text-4xl md:text-5xl font-bold text-center mb-16 bg-clip-text text-transparent bg-gradient-to-r from-purple-300 to-pink-300"
+            variants={itemVariants}
+          >
+            How It Works
+          </motion.h2>
+
+          <div className="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto">
+            <motion.div
+              variants={itemVariants}
+              whileHover={{ y: -10 }}
+              className="bg-gradient-to-br from-purple-800/50 to-purple-900/50 backdrop-blur-sm rounded-3xl p-8 shadow-2xl border border-purple-700/30"
+            >
+              <motion.div
+                className="flex items-center mb-6"
+                whileHover={{ scale: 1.1 }}
+              >
+                <Users className="w-12 h-12 text-purple-300 mr-4" />
+                <h3 className="text-3xl font-bold text-purple-200">
+                  For Workers
+                </h3>
+              </motion.div>
+              <div className="space-y-4 text-lg">
+                <motion.p whileHover={{ x: 10 }} className="flex items-start">
+                  <Star className="w-6 h-6 text-yellow-400 mr-3 mt-1 flex-shrink-0" />
+                  <span>
+                    Create a stunning profile showcasing your skills,
+                    experience, and availability
+                  </span>
+                </motion.p>
+                <motion.p whileHover={{ x: 10 }} className="flex items-start">
+                  <Shield className="w-6 h-6 text-green-400 mr-3 mt-1 flex-shrink-0" />
+                  <span>
+                    Get verified and build trust with potential employers
+                    through our secure platform
+                  </span>
+                </motion.p>
+                <motion.p whileHover={{ x: 10 }} className="flex items-start">
+                  <Clock className="w-6 h-6 text-blue-400 mr-3 mt-1 flex-shrink-0" />
+                  <span>
+                    Set your rates, schedule, and preferred work arrangements
+                  </span>
+                </motion.p>
+                <motion.p whileHover={{ x: 10 }} className="flex items-start">
+                  <Languages className="w-6 h-6 text-purple-400 mr-3 mt-1 flex-shrink-0" />
+                  <span>
+                    Receive job instructions in your preferred language with
+                    auto-translation
+                  </span>
+                </motion.p>
+              </div>
+            </motion.div>
+
+            <motion.div
+              variants={itemVariants}
+              whileHover={{ y: -10 }}
+              className="bg-gradient-to-br from-purple-800/50 to-purple-900/50 backdrop-blur-sm rounded-3xl p-8 shadow-2xl border border-purple-700/30"
+            >
+              <motion.div
+                className="flex items-center mb-6"
+                whileHover={{ scale: 1.1 }}
+              >
+                <Home className="w-12 h-12 text-purple-300 mr-4" />
+                <h3 className="text-3xl font-bold text-purple-200">
+                  For Employers
+                </h3>
+              </motion.div>
+              <div className="space-y-4 text-lg">
+                <motion.p whileHover={{ x: 10 }} className="flex items-start">
+                  <Home className="w-6 h-6 text-purple-400 mr-3 mt-1 flex-shrink-0" />
+                  <span>
+                    Design your house profile with detailed layouts, rooms, and
+                    specific requirements
+                  </span>
+                </motion.p>
+                <motion.p whileHover={{ x: 10 }} className="flex items-start">
+                  <Star className="w-6 h-6 text-yellow-400 mr-3 mt-1 flex-shrink-0" />
+                  <span>
+                    Create comprehensive cleaning instructions and task lists
+                  </span>
+                </motion.p>
+                <motion.p whileHover={{ x: 10 }} className="flex items-start">
+                  <Languages className="w-6 h-6 text-green-400 mr-3 mt-1 flex-shrink-0" />
+                  <span>
+                    Instructions automatically translated to your worker&#39;s
+                    preferred language
+                  </span>
+                </motion.p>
+                <motion.p whileHover={{ x: 10 }} className="flex items-start">
+                  <Shield className="w-6 h-6 text-blue-400 mr-3 mt-1 flex-shrink-0" />
+                  <span>
+                    Browse verified workers with ratings, reviews, and
+                    background checks
+                  </span>
+                </motion.p>
+              </div>
+            </motion.div>
+          </div>
+        </motion.section>
+
+        <motion.section
+          variants={itemVariants}
+          className="container mx-auto px-6 py-16"
         >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+          <motion.h2
+            className="text-4xl md:text-5xl font-bold text-center mb-16 bg-clip-text text-transparent bg-gradient-to-r from-purple-300 to-pink-300"
+            variants={itemVariants}
+          >
+            Why Choose WorkConnect?
+          </motion.h2>
+
+          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {[
+              {
+                icon: Shield,
+                title: "Trust & Safety",
+                description:
+                  "Verified profiles, secure payments, and comprehensive background checks ensure peace of mind for everyone.",
+              },
+              {
+                icon: Languages,
+                title: "Multi-Language Support",
+                description:
+                  "Break language barriers with automatic translation of job instructions and communication.",
+              },
+              {
+                icon: Star,
+                title: "Quality Matching",
+                description:
+                  "Smart matching algorithm connects the right workers with the right employers based on skills and preferences.",
+              },
+            ].map((benefit, index) => (
+              <motion.div
+                key={index}
+                variants={itemVariants}
+                whileHover={{ y: -15, scale: 1.05 }}
+                className="bg-gradient-to-br from-purple-800/40 to-purple-900/40 backdrop-blur-sm rounded-2xl p-6 text-center shadow-xl border border-purple-700/20"
+              >
+                <motion.div
+                  whileHover={{ rotate: 360 }}
+                  transition={{ duration: 0.6 }}
+                  className="inline-block mb-4"
+                >
+                  <benefit.icon className="w-16 h-16 text-purple-300 mx-auto" />
+                </motion.div>
+                <h3 className="text-2xl font-bold mb-4 text-purple-200">
+                  {benefit.title}
+                </h3>
+                <p className="text-gray-300 leading-relaxed">
+                  {benefit.description}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.section>
+
+        <motion.section
+          variants={itemVariants}
+          className="container mx-auto px-6 py-20 text-center"
         >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+          <motion.h2
+            className="text-4xl md:text-5xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-purple-300 to-pink-300"
+            variants={itemVariants}
+          >
+            Ready to Get Started?
+          </motion.h2>
+          <motion.p
+            className="text-xl mb-12 max-w-2xl mx-auto text-gray-300"
+            variants={itemVariants}
+          >
+            Join thousands of satisfied workers and employers who trust
+            WorkConnect for their domestic service needs.
+          </motion.p>
+
+          <SignedOut>
+            <motion.div
+              variants={itemVariants}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Link href="/sign-up">
+                <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white text-xl py-6 px-12 rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 transform">
+                  Create Your Profile Today
+                </Button>
+              </Link>
+            </motion.div>
+          </SignedOut>
+        </motion.section>
+      </motion.div>
     </div>
   );
 }
