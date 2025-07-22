@@ -169,6 +169,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
+import FeatureMotionWrapper from "./FeatureMotionWrapper";
 
 interface Room {
   type: string;
@@ -314,24 +315,32 @@ export default function InstructionTranslator({
           ))}
         </SelectContent>
       </Select>
-      <Button onClick={handleTranslate} disabled={loading}>
-        {loading ? "Translating..." : "Translate"}
-      </Button>
+      <div className="flex justify-center items-center">
+        <Button
+          onClick={handleTranslate}
+          disabled={loading}
+          className="gradient-background2 text-white"
+        >
+          {loading ? "Translating..." : "Translate"}
+        </Button>
+      </div>
+
       <div className="space-y-2">
-        <h3 className="text-lg font-semibold">Room Instructions</h3>
+        <h3 className="text-2xl font-semibold text-center">
+          Room Instructions
+        </h3>
         {displayRooms.length > 0 ? (
           displayRooms.map((room, index) => (
-            <div
-              key={index}
-              className="my-2 p-4 bg-purple-950/20 rounded-lg shadow-md border border-purple-400 transform transition-all hover:shadow-lg hover:scale-105"
-            >
-              <h4 className="text-md font-semibold text-purple-100">
-                {room.type}
-              </h4>
-              <p className="text-sm text-gray-300">
-                {room.instructions || "No instructions provided."}
-              </p>
-            </div>
+            <FeatureMotionWrapper key={index} index={index}>
+              <div className="my-2 p-4 bg-purple-950/20 rounded-lg shadow-md border border-purple-400 transform transition-all hover:shadow-lg hover:scale-105">
+                <h4 className="text-md font-semibold text-purple-100">
+                  {room.type}
+                </h4>
+                <p className="text-sm text-gray-300">
+                  {room.instructions || "No instructions provided."}
+                </p>
+              </div>
+            </FeatureMotionWrapper>
           ))
         ) : (
           <p className="text-sm text-muted-foreground">No rooms added.</p>

@@ -430,6 +430,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import * as fabric from "fabric";
+import MotionWrapperDelay from "./MotionWrapperDelay";
 
 interface Room {
   type: string;
@@ -555,7 +556,21 @@ const HouseView: React.FC<HouseViewProps> = ({ rooms }) => {
 
   return (
     <div className="space-y-6 bg-white/5 p-6 rounded-lg shadow-lg">
-      <h3 className="text-lg font-bold text-purple-200 mb-4">House Layout</h3>
+      <MotionWrapperDelay
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.5 }}
+        transition={{ duration: 0.4, delay: 0.4 }}
+        variants={{
+          hidden: { opacity: 0, x: -100 },
+          visible: { opacity: 1, x: 0 },
+        }}
+      >
+        <h3 className="my-2 p-4 bg-gradient-to-t from-purple-950 to-black rounded-lg shadow-md border border-purple-400 transform transition-all hover:shadow-lg hover:scale-105 text-center">
+          House Layout
+        </h3>
+      </MotionWrapperDelay>
+
       <div ref={containerRef} className="relative w-full overflow-hidden">
         <div className="flex justify-center">
           <canvas

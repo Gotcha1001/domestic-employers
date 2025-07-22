@@ -1204,6 +1204,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { SignedIn, SignedOut } from "@clerk/nextjs";
 import Link from "next/link";
+import MotionWrapperDelay from "@/components/MotionWrapperDelay";
 
 interface Room {
   type: string;
@@ -1308,32 +1309,89 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
       >
         <Card className="bg-gradient-to-br from-purple-800 to-indigo-800 text-white shadow-xl border-0">
           <CardHeader>
-            <CardTitle className="text-2xl font-bold text-purple-100">
-              {profile.name}&apos;s Profile
-            </CardTitle>
-            <p className="text-sm text-purple-200">
-              {profile.profileType === "employer" ? "Employer" : "Worker"}
-            </p>
+            <MotionWrapperDelay
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.5 }}
+              transition={{ duration: 0.4, delay: 0.6 }}
+              variants={{
+                hidden: { opacity: 0, y: -100 },
+                visible: { opacity: 1, y: 0 },
+              }}
+            >
+              <CardTitle className="text-4xl font-bold gradient-title text-purple-100 text-center">
+                {profile.name}&apos;s Profile
+              </CardTitle>
+            </MotionWrapperDelay>
+            <MotionWrapperDelay
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.5 }}
+              transition={{ duration: 0.4, delay: 0.6 }}
+              variants={{
+                hidden: { opacity: 0, x: 100 },
+                visible: { opacity: 1, x: 0 },
+              }}
+            >
+              <p className="text-lg text-purple-200 text-center">
+                {profile.profileType === "employer" ? "Employer" : "Worker"}
+              </p>
+            </MotionWrapperDelay>
           </CardHeader>
           <CardContent className="space-y-6">
             {profile.image && (
               <div className="flex justify-center">
-                <img
-                  src={profile.image}
-                  alt={profile.name}
-                  className="w-32 h-32 rounded-full object-cover mb-4"
-                  onError={(e) => (e.currentTarget.src = "/placeholder.png")}
-                />
+                <MotionWrapperDelay
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, amount: 0.5 }}
+                  transition={{ duration: 0.4, delay: 0.4 }}
+                  variants={{
+                    hidden: { opacity: 0, y: -100 },
+                    visible: { opacity: 1, y: 0 },
+                  }}
+                >
+                  <img
+                    src={profile.image}
+                    alt={profile.name}
+                    className="w-32 h-32 rounded-full object-cover mb-4"
+                    onError={(e) => (e.currentTarget.src = "/placeholder.png")}
+                  />
+                </MotionWrapperDelay>
               </div>
             )}
 
             <div>
-              <h3 className="text-lg font-semibold text-purple-200">
-                Location
-              </h3>
-              <p className="text-sm text-gray-300">
-                {parseLocationName(profile.address)}
-              </p>
+              <MotionWrapperDelay
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.5 }}
+                transition={{ duration: 0.4, delay: 0.4 }}
+                variants={{
+                  hidden: { opacity: 0, x: -100 },
+                  visible: { opacity: 1, x: 0 },
+                }}
+              >
+                <h3 className="text-2xl font-semibold text-purple-200 text-center mb-4">
+                  Location
+                </h3>
+              </MotionWrapperDelay>
+
+              <MotionWrapperDelay
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.5 }}
+                transition={{ duration: 0.4, delay: 0.7 }}
+                variants={{
+                  hidden: { opacity: 0, y: 100 },
+                  visible: { opacity: 1, y: 0 },
+                }}
+              >
+                <p className="text-sm text-gray-300 text-center mb-4 gradient-background2 rounded-lg p-3">
+                  {parseLocationName(profile.address)}
+                </p>
+              </MotionWrapperDelay>
+
               {profile.coordinates ? (
                 <MapDisplay
                   location={JSON.stringify({
@@ -1393,17 +1451,29 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
                     <h3 className="text-lg font-semibold text-purple-200">
                       Preferred Schedule
                     </h3>
-                    <p className="text-sm text-gray-300">
+                    <p className="my-2 p-4 bg-purple-950/20 rounded-lg shadow-md border border-purple-400 transform transition-all hover:shadow-lg hover:scale-105">
                       {profile.preferredSchedule}
                     </p>
                   </div>
                 )}
                 {profile.additionalNotes && (
                   <div>
-                    <h3 className="text-lg font-semibold text-purple-200">
-                      Additional Notes
-                    </h3>
-                    <p className="text-sm text-gray-300">
+                    <MotionWrapperDelay
+                      initial="hidden"
+                      whileInView="visible"
+                      viewport={{ once: true, amount: 0.5 }}
+                      transition={{ duration: 0.4, delay: 0.7 }}
+                      variants={{
+                        hidden: { opacity: 0, y: 100 },
+                        visible: { opacity: 1, y: 0 },
+                      }}
+                    >
+                      <h3 className="text-lg font-semibold text-purple-200">
+                        Additional Notes
+                      </h3>
+                    </MotionWrapperDelay>
+
+                    <p className="my-2 p-4 bg-purple-950/20 rounded-lg shadow-md border border-purple-400 transform transition-all hover:shadow-lg hover:scale-105">
                       {profile.additionalNotes}
                     </p>
                   </div>
@@ -1418,7 +1488,9 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
                     <h3 className="text-lg font-semibold text-purple-200">
                       Strengths
                     </h3>
-                    <p className="text-sm text-gray-300">{profile.strengths}</p>
+                    <p className="my-2 p-4 bg-purple-950/20 rounded-lg shadow-md border border-purple-400 transform transition-all hover:shadow-lg hover:scale-105">
+                      {profile.strengths}
+                    </p>
                   </div>
                 )}
                 {profile.availability && (
@@ -1426,7 +1498,7 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
                     <h3 className="text-lg font-semibold text-purple-200">
                       Availability
                     </h3>
-                    <p className="text-sm text-gray-300">
+                    <p className="my-2 p-4 bg-purple-950/20 rounded-lg shadow-md border border-purple-400 transform transition-all hover:shadow-lg hover:scale-105">
                       {profile.availability}
                     </p>
                   </div>
@@ -1459,10 +1531,23 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
                 )}
                 {profile.experienceLevel && (
                   <div>
-                    <h3 className="text-lg font-semibold text-purple-200">
-                      Experience Level
-                    </h3>
-                    <p className="text-sm text-gray-300">
+                    <MotionWrapperDelay
+                      initial="hidden"
+                      whileInView="visible"
+                      viewport={{ once: true, amount: 0.5 }}
+                      transition={{ duration: 0.4, delay: 0.7 }}
+                      variants={{
+                        hidden: { opacity: 0, y: 100 },
+                        visible: { opacity: 1, y: 0 },
+                      }}
+                    >
+                      {" "}
+                      <h3 className="text-lg font-semibold text-purple-200">
+                        Experience Level
+                      </h3>
+                    </MotionWrapperDelay>
+
+                    <p className="my-2 p-4 bg-purple-950/20 rounded-lg shadow-md border border-purple-400 transform transition-all hover:shadow-lg hover:scale-105">
                       {profile.experienceLevel}
                     </p>
                   </div>
@@ -1473,16 +1558,29 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
                       <h3 className="text-lg font-semibold text-purple-200">
                         Preferred Work Types
                       </h3>
-                      <p className="text-sm text-gray-300">
+                      <p className="my-2 p-4 bg-purple-950/20 rounded-lg shadow-md border border-purple-400 transform transition-all hover:shadow-lg hover:scale-105">
                         {profile.preferredWorkTypes.join(", ")}
                       </p>
                     </div>
                   )}
                 {profile.references && profile.references.length > 0 && (
                   <div>
-                    <h3 className="text-lg font-semibold text-purple-200">
-                      References
-                    </h3>
+                    <MotionWrapperDelay
+                      initial="hidden"
+                      whileInView="visible"
+                      viewport={{ once: true, amount: 0.5 }}
+                      transition={{ duration: 0.4, delay: 0.7 }}
+                      variants={{
+                        hidden: { opacity: 0, x: 100 },
+                        visible: { opacity: 1, x: 0 },
+                      }}
+                    >
+                      {" "}
+                      <h3 className="text-lg font-semibold text-purple-200">
+                        References
+                      </h3>
+                    </MotionWrapperDelay>
+
                     {profile.references.map((ref, index) => (
                       <div
                         key={index}
