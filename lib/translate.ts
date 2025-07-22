@@ -1,4 +1,3 @@
-// lib/translate.ts
 import * as deepl from "deepl-node";
 
 if (!process.env.DEEPL_API_KEY) {

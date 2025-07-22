@@ -1,4 +1,3 @@
-// api/translate/route.ts
 import * as deepl from "deepl-node";
 import { NextResponse } from "next/server";
 

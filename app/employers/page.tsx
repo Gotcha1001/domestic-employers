@@ -276,7 +276,7 @@ export default function EmployersPage() {
       >
         <h1 className="text-3xl font-bold mb-6">Employers</h1>
         <SearchBar
-          placeholder="Search employers by name or address..."
+          placeholder="Search employers by name, address, or preferences..."
           value={searchQuery}
           onChange={(e) => {
             setSearchQuery(e.target.value);
